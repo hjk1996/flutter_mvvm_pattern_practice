@@ -1,4 +1,7 @@
 import 'package:flutter/cupertino.dart';
+import 'package:flutter_mvvm/data/data_source/remote_data_source.dart';
+import 'package:flutter_mvvm/data/repository/repository_impl.dart';
+import 'package:flutter_mvvm/domain/repository/repository.dart';
 import 'package:flutter_mvvm/domain/usecase/login_usecase.dart';
 import 'package:flutter_mvvm/presentation/base/base_viewmodel.dart';
 import 'package:flutter_mvvm/presentation/login/login.dart';
@@ -7,9 +10,7 @@ class LoginViewModel with ChangeNotifier {
   String? _username;
   String? _password;
 
-  LoginUseCase? _loginUseCase;
-
-  LoginViewModel(this._loginUseCase);
+  late LoginUseCase? _loginUseCase;
 
   @override
   void dispose() {

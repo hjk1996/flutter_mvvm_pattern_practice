@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_mvvm/presentation/login/login_viewmodel.dart';
 import 'package:flutter_mvvm/presentation/resources/assets_manager.dart';
 import 'package:flutter_mvvm/presentation/resources/color_manager.dart';
+import 'package:flutter_mvvm/presentation/resources/routes_manager.dart';
 import 'package:flutter_mvvm/presentation/resources/strings_manager.dart';
 import 'package:flutter_mvvm/presentation/resources/value_manager.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -65,12 +66,11 @@ class _LoginViewState extends State<LoginView> {
     }
   }
 
-  void onButtonPressed() {}
-
   @override
   Widget build(BuildContext context) {
     final _viewModel = Provider.of<LoginViewModel>(context, listen: false);
     return Scaffold(
+      backgroundColor: ColorManager.white,
       body: Container(
         padding: const EdgeInsets.only(top: AppPadding.p100),
         color: ColorManager.white,
@@ -114,12 +114,52 @@ class _LoginViewState extends State<LoginView> {
                 ),
                 const SizedBox(height: AppSize.s28),
                 Padding(
-                    padding:
-                        const EdgeInsets.symmetric(horizontal: AppPadding.p28),
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: AppPadding.p28),
+                  child: SizedBox(
+                    width: double.infinity,
+                    height: AppSize.s40,
                     child: ElevatedButton(
-                      onPressed: _isUserInputValid ? () {} : null,
+                      onPressed: _isUserInputValid
+                          ? () async {
+                              await _viewModel.login();
+                            }
+                          : null,
                       child: const Text(AppStrings.login),
-                    ))
+                    ),
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.only(
+                      top: AppPadding.p8,
+                      left: AppPadding.p28,
+                      right: AppPadding.p28),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceAround,
+                    children: [
+                      TextButton(
+                        onPressed: () {
+                          Navigator.of(context)
+                              .pushReplacementNamed(Routes.forgotPasswordRoute);
+                        },
+                        child: Text(
+                          AppStrings.forgotPassword,
+                          style: TextStyle(color: ColorManager.primary),
+                        ),
+                      ),
+                      TextButton(
+                        onPressed: () {
+                          Navigator.of(context)
+                              .pushReplacementNamed(Routes.registerRoute);
+                        },
+                        child: Text(
+                          AppStrings.registerText,
+                          style: TextStyle(color: ColorManager.primary),
+                        ),
+                      ),
+                    ],
+                  ),
+                )
               ],
             ),
           ),
@@ -132,7 +172,7 @@ class _LoginViewState extends State<LoginView> {
 class LoginValidator {
   static String? validatePassword(String? password) {
     if (password == null || password.isEmpty) {
-      return "Please enter your password";
+      return "Please enter your email";
     }
     return null;
   }
